@@ -2,7 +2,7 @@ import { Sequelize } from "sequelize";
 import { sequelize } from "../../database/database"; // importamos la cadena de conexion
 
 
-const Person = sequelize.define('persons', {
+const User = sequelize.define('users', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true, autoIncrement: true
@@ -20,8 +20,8 @@ const Person = sequelize.define('persons', {
     timestamps: false
 });
 
-Person.asociate = function () {
+User.asociate = function () {
     
 }
 
-export default Person;  
+export default User;  

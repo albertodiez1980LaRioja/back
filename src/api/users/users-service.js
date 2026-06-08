@@ -2,7 +2,7 @@ const { BaseService } = require("../../shared/base/base-service");
 const bcrypt = require('bcrypt');
 
 
-class PersonService extends BaseService {
+class UserService extends BaseService {
     authenticate = async function (username, plainPassword) {
         if (username == undefined || plainPassword == undefined)
             return undefined;
@@ -76,4 +76,4 @@ class PersonService extends BaseService {
 
 }
 
-exports.PersonService = (repository) => new PersonService(repository);
+exports.UserService = (repository) => new UserService(repository);

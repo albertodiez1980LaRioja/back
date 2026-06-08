@@ -3,7 +3,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
-import Person from '../src/api/persons/persons-model';
+import Person from '../src/api/users/users-model';
 
 module.exports = async function (req, res, next) {
     if (config.isApiSecured != 'false') {

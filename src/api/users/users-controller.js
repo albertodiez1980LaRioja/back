@@ -1,6 +1,6 @@
-import { PersonService } from './persons-service';
-import { PersonRepository } from './persons-repository';
-import Person from './persons-model';
+import { UserService } from './users-service';
+import { UserRepository } from './users-repository';
+import User from './users-model';
 import { Router } from 'express';
 const jwt = require('jsonwebtoken');
 const config = require('../../../config/config');
@@ -10,7 +10,7 @@ const RouterPlace = Router();
 
 let { BaseController } = require("../../shared/base/base-controller");
 
-class PersonController extends BaseController {
+class UserController extends BaseController {
     constructor(service, options = {}) {
         super(service, options);
 
@@ -85,4 +85,4 @@ class PersonController extends BaseController {
 
 }
 
-export default new PersonController(new PersonService(new PersonRepository(Person)));
+export default new UserController(new UserService(new UserRepository(User)));

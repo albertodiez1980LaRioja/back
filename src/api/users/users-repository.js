@@ -1,6 +1,6 @@
 const { BaseRepository } = require("../../shared/base/base-repository");
 
-class PersonRepository extends BaseRepository {
+class UserRepository extends BaseRepository {
     read = async function (user_name, scope) {
         try {
             const object = { where: { user_name: user_name.username } };
@@ -13,4 +13,4 @@ class PersonRepository extends BaseRepository {
     }
 }
 
-exports.PersonRepository = (model) => new PersonRepository(model); 
+exports.UserRepository = (model) => new UserRepository(model); 

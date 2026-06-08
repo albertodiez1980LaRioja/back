@@ -19,8 +19,7 @@ const config = {
         host: process.env.SEQUELIZE_HOST,
         port: process.env.SEQUELIZE_PORT,
         schema: process.env.SEQUELIZE_SCHEMA || 'postgress',
-    },
-    simulate_places: process.env.SIMULATE_PLACES
+    }
 };
 
 console.log('Configuration loaded:', config);

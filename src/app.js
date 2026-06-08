@@ -6,7 +6,7 @@ import { sequelize } from "./database/database";
 import config from '../config/config';
 
 
-import RouterPerson from './api/persons/persons-controller';
+import RouterPerson from './api/users/users-controller';
 
 // initialization
 var app = express();
