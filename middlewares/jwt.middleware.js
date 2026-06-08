@@ -12,16 +12,17 @@ module.exports = async function (req, res, next) {
 
         }
         else {
-            let token = req.body.token || req.query.token || req.headers["x-access-token"];
+            let token = req.body?.token || req.query?.token || req.headers["x-access-token"] || req.headers.authorization;
             if (!token) {
                 return res.status(401).send('Invalid token, void');
             }
-
             try {
+                console.log('token', token);
+                token = token.split(' ')[1];
                 const decoded = jwt.verify(token, config.secret);
                 const user = await Person.findAll({
                     where: {
-                        user_name: decoded.usuario.user_name, pass: decoded.usuario.pass
+                        user_name: decoded.usuario.user_name//, pass: decoded.usuario.pass
                     }
                 });
                 if (!user || user === undefined) {
@@ -31,7 +32,6 @@ module.exports = async function (req, res, next) {
             } catch (err) {
                 return res.status(401).send('Invalid token');
             }
-
         }
     }
     next();

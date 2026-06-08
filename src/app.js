@@ -7,6 +7,7 @@ import config from '../config/config';
 
 
 import RouterUsers from './api/users/users-controller';
+import RouterEnterprises from './api/enterprises/enterprises-controller';
 
 // initialization
 var app = express();
@@ -53,6 +54,7 @@ app.use(jwt);
 
 // routes
 app.use('/api/users', RouterUsers.router);
+app.use('/api/enterprises', RouterEnterprises.router);
 
 
 export default app;  

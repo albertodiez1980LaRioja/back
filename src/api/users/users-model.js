@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize";
 import { sequelize } from "../../database/database"; // importamos la cadena de conexion
 
 
+
 const User = sequelize.define('users', {
     id: {
         type: Sequelize.INTEGER,
