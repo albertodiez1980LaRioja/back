@@ -6,7 +6,7 @@ import { sequelize } from "./database/database";
 import config from '../config/config';
 
 
-import RouterPerson from './api/users/users-controller';
+import RouterUsers from './api/users/users-controller';
 
 // initialization
 var app = express();
@@ -52,7 +52,7 @@ app.use(requestTime);
 app.use(jwt);
 
 // routes
-//app.use('/api/places', RouterPlace.router);
+app.use('/api/users', RouterUsers.router);
 
 
 export default app;  
