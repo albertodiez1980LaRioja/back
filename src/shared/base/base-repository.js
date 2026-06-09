@@ -1,4 +1,8 @@
-import { Sequelize } from "sequelize";
+'use strict';
+
+
+
+import Sequelize from "sequelize";
 
 class BaseRepository {
     constructor(model, options = {}) {
@@ -131,29 +135,17 @@ class BaseRepository {
         }
     }
 
-    async create(req, res, transaction = undefined) {
-        let campos = req.body;
+    async create(data) {
         try {
-            let params = {
-                fields: campos['id_asignatura']
-            };
-            if (transaction != undefined)
-                params.transaction = transaction;
-            if (campos.id == undefined || campos.id == '')
-                delete campos.id;
-            let newRow = await this.model.create(campos, params)
+            console.log('model', this.model.create);
+            let newRow = await this.model.create(data)
             return newRow;
         } catch (err) {
-            if (transaction != undefined)
-                await transaction.rollback();
-            console.log('Fail on create', err);
-            res.status(500).json({
-                message: 'Something goes wrong: ' + err,
-                data: {}
-            });
+            throw err;
         }
 
     }
 }
 
-exports.BaseRepository = (model) => new BaseRepository(model);
+export default BaseRepository;
+

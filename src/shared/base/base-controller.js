@@ -47,5 +47,5 @@ class BaseController {
     }
 }
 
-exports.BaseController = (service) => new BaseController(service);
+export default BaseController;
 

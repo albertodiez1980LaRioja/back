@@ -1,8 +1,9 @@
-const { BaseService } = require("../../shared/base/base-service");
+import BaseService from '../../shared/base/base-service.js';
 
 
 class EnterpriseService extends BaseService {
 
 }
 
-exports.EnterpriseService = (repository) => new EnterpriseService(repository);
+export default EnterpriseService;
+

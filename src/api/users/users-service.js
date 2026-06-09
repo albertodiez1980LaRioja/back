@@ -1,5 +1,6 @@
-const { BaseService } = require("../../shared/base/base-service");
-const bcrypt = require('bcrypt');
+import BaseService from '../../shared/base/base-service.js';
+
+import bcrypt from 'bcrypt';
 
 
 class UserService extends BaseService {
@@ -72,4 +73,5 @@ class UserService extends BaseService {
 
 }
 
-exports.UserService = (repository) => new UserService(repository);
+export default UserService;
+

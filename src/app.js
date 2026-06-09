@@ -1,28 +1,37 @@
 import express, { json } from 'express';
 import morgan from 'morgan';
 
-const jwt = require('../middlewares/jwt.middleware');
-import { sequelize } from "./database/database";
-import config from '../config/config';
+import jwt from '../middlewares/jwt.middleware.js';
+import { sequelize } from "./database/database.js";
+import config from '../config/config.js';
 
 
-import RouterUsers from './api/users/users-controller';
-import RouterEnterprises from './api/enterprises/enterprises-controller';
+import RouterUsers from './api/users/users-controller.js';
+import RouterEnterprises from './api/enterprises/enterprises-controller.js';
+
+
+import { loadEnterprises } from '../loaders/finance/loader.js';
 
 // initialization
 var app = express();
 
 
-sequelize.authenticate().then(() => sequelize);
-
-for (let table in sequelize.models) {
-    const model = sequelize.model(table);
-    if (model.asociate != undefined) {
-        model.asociate();
-    }
-}
-
-    sequelize.sync({ force: false }); // sync all tables
+sequelize.authenticate()
+    .then(() => {
+        for (let table in sequelize.models) {
+            const model = sequelize.model(table);
+            if (typeof model.asociate === 'function') {
+                model.asociate(sequelize.models); 
+            }
+        }
+        return sequelize.sync({ force: false });
+    })
+    .then(() => {
+        loadEnterprises(); 
+    })
+    .catch(err => {
+        console.error('Error crítico en el arranque de la Base de Datos:', err);
+    });
 
 
 app.disable('etag');
@@ -33,7 +42,8 @@ app.use(morgan('dev')); // dev de desarrollo, imprime las llamadas
 app.use(json()); // archivos en formato json
 
 // es para que no salga fallo de CORS, si no se pone esto entonces desde el navegador no se lee el JSON
-const cors = require('cors');
+import cors from 'cors';
+
 app.use(cors());
 
 //app.use(bodyParser.json());                                     // parse application/json
@@ -57,4 +67,5 @@ app.use('/api/users', RouterUsers.router);
 app.use('/api/enterprises', RouterEnterprises.router);
 
 
-export default app;  
+
+export default app;

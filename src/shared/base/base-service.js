@@ -28,4 +28,5 @@ class BaseService {
     }
 }
 
-exports.BaseService = (repository) => new BaseService(repository);
+export default BaseService;
+

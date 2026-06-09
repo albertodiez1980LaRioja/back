@@ -1,11 +1,11 @@
 'use strict';
 
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const config = require('../config/config');
-import Person from '../src/api/users/users-model';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import config from '../config/config.js';
+import User from '../src/api/users/users-model.js';
 
-module.exports = async function (req, res, next) {
+export default async function (req, res, next) {
     if (config.isApiSecured != 'false') {
 
         if (config.routesWhitelist.includes(req.originalUrl)) {
@@ -17,10 +17,9 @@ module.exports = async function (req, res, next) {
                 return res.status(401).send('Invalid token, void');
             }
             try {
-                console.log('token', token);
                 token = token.split(' ')[1];
                 const decoded = jwt.verify(token, config.secret);
-                const user = await Person.findAll({
+                const user = await User.findAll({
                     where: {
                         user_name: decoded.usuario.user_name//, pass: decoded.usuario.pass
                     }

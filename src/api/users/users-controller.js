@@ -1,14 +1,14 @@
-import { UserService } from './users-service';
-import { UserRepository } from './users-repository';
-import User from './users-model';
+import UserService from './users-service.js';
+import UserRepository from './users-repository.js';
+import User from './users-model.js';
 import { Router } from 'express';
-const jwt = require('jsonwebtoken');
-const config = require('../../../config/config');
+import jwt from 'jsonwebtoken';
+import config from '../../../config/config.js';
 const RouterPlace = Router();
 
 
 
-let { BaseController } = require("../../shared/base/base-controller");
+import BaseController from '../../shared/base/base-controller.js';
 
 class UserController extends BaseController {
     constructor(service, options = {}) {

@@ -1,4 +1,4 @@
-const { BaseRepository } = require("../../shared/base/base-repository");
+import BaseRepository from '../../shared/base/base-repository.js';
 
 class UserRepository extends BaseRepository {
     read = async function (user_name, scope) {
@@ -13,4 +13,4 @@ class UserRepository extends BaseRepository {
     }
 }
 
-exports.UserRepository = (model) => new UserRepository(model); 
+export default UserRepository;

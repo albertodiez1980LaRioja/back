@@ -1,7 +1,7 @@
 'use strict';
 
 // Set env variables
-require('dotenv').config();
+import 'dotenv/config';
 
 const config = {
     expressPort: process.env.EXPRESS_PORT,
@@ -24,4 +24,4 @@ const config = {
 
 console.log('Configuration loaded:', config);
 
-module.exports = config;
+export default config;

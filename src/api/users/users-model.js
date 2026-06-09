@@ -1,5 +1,5 @@
 import { Sequelize } from "sequelize";
-import { sequelize } from "../../database/database"; // importamos la cadena de conexion
+import { sequelize } from "../../database/database.js"; // importamos la cadena de conexion
 
 
 

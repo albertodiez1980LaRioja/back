@@ -1,14 +1,13 @@
-import { EnterpriseService } from './enterprises-service';
-import { EnterpriseRepository } from './enterprises-repository';
-import EnterpriseModel from './enterprises-model';
+import EnterpriseService from './enterprises-service.js';
+import EnterpriseRepository from './enterprises-repository.js';
+import EnterpriseModel from './enterprises-model.js';
 import { Router } from 'express';
-const jwt = require('jsonwebtoken');
-const config = require('../../../config/config');
+import config from '../../../config/config.js';
 const RouterPlace = Router();
 
 
 
-let { BaseController } = require("../../shared/base/base-controller");
+import BaseController from '../../shared/base/base-controller.js';
 
 class EnterpriseController extends BaseController {
     constructor(service, options = {}) {

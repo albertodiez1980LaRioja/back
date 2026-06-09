@@ -1,21 +1,18 @@
-import { Sequelize } from "sequelize";
-import { sequelize } from "../../database/database";
+import { Model, DataTypes } from 'sequelize';
+import { sequelize } from "../../database/database.js"; // Asegúrate de que la ruta sea correcta
 
-
-const { DataTypes } = require('sequelize');
-
-
+// Declaramos la clase que hereda de Model
 const EnterpriseModel = sequelize.define('enterprises', {
     symbol: { type: DataTypes.STRING(10), allowNull: false, primaryKey: true },
     price: { type: DataTypes.DECIMAL(15, 2) },
-    marketCap: { type: DataTypes.BIGINT },
+    marketCap: { type: DataTypes.FLOAT },
     beta: { type: DataTypes.FLOAT },
     lastDividend: { type: DataTypes.DECIMAL(10, 4) },
     range: { type: DataTypes.STRING(50) },
     change: { type: DataTypes.DECIMAL(15, 5) },
     changePercentage: { type: DataTypes.DECIMAL(15, 5), },
-    volume: { type: DataTypes.BIGINT },
-    averageVolume: { type: DataTypes.BIGINT },
+    volume: { type: DataTypes.FLOAT },
+    averageVolume: { type: DataTypes.FLOAT },
     companyName: {  type: DataTypes.STRING(255), allowNull: false },
     currency: { type: DataTypes.STRING(10) },
     cik: { type: DataTypes.STRING(20) },
@@ -45,23 +42,19 @@ const EnterpriseModel = sequelize.define('enterprises', {
 }, {
     timestamps: false,
     indexes: [
-        {
-            fields: ['symbol']
-        },
-        {
-            fields: ['companyName']
-        },
-        {
-            fields: ['exchange']
-        },
-        {
-            fields: ['sector']
-        }]
-    }
-);
+        { fields: ['symbol'] },
+        { fields: ['companyName'] },
+        { fields: ['exchange'] },
+        { fields: ['sector'] }
+    ]
+});
 
 EnterpriseModel.asociate = function () {
 
 }
 
-export default EnterpriseModel;  
+export default EnterpriseModel;
+
+
+
+

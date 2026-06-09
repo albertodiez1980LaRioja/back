@@ -1,7 +1,8 @@
-const { BaseRepository } = require("../../shared/base/base-repository");
+import BaseRepository from '../../shared/base/base-repository.js';
 
 class EnterpriseRepository extends BaseRepository {
 
 }
 
-exports.EnterpriseRepository = (model) => new EnterpriseRepository(model); 
+export default EnterpriseRepository;
+
