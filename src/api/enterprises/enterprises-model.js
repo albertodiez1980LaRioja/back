@@ -40,7 +40,7 @@ const EnterpriseModel = sequelize.define('enterprises', {
     isAdr: { type: DataTypes.BOOLEAN, defaultValue: false },
     isFund: { type: DataTypes.BOOLEAN, defaultValue: false }
 }, {
-    timestamps: false,
+    timestamps: true,
     indexes: [
         { fields: ['symbol'] },
         { fields: ['companyName'] },

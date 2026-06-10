@@ -8,9 +8,11 @@ import config from '../config/config.js';
 
 import RouterUsers from './api/users/users-controller.js';
 import RouterEnterprises from './api/enterprises/enterprises-controller.js';
+import RouterFundamentals from './api/fundamentals/fundamentals-controller.js';
 
 
-import { loadEnterprises } from '../loaders/finance/loader.js';
+
+import { loadFinancialData } from '../loaders/finance/loader.js';
 
 // initialization
 var app = express();
@@ -27,7 +29,7 @@ sequelize.authenticate()
         return sequelize.sync({ force: false });
     })
     .then(() => {
-        loadEnterprises(); 
+        loadFinancialData(); 
     })
     .catch(err => {
         console.error('Error crítico en el arranque de la Base de Datos:', err);

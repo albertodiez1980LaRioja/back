@@ -1,6 +1,6 @@
-import EnterpriseService from './enterprises-service.js';
-import EnterpriseRepository from './enterprises-repository.js';
-import EnterpriseModel from './enterprises-model.js';
+import FundamentalsService from './fundamentals-service.js';
+import FundamentalsRepository from './fundamentals-repository.js';
+import FundamentalsModel from './fundamentals-model.js';
 import { Router } from 'express';
 import config from '../../../config/config.js';
 const RouterPlace = Router();
@@ -9,7 +9,7 @@ const RouterPlace = Router();
 
 import BaseController from '../../shared/base/base-controller.js';
 
-class EnterpriseController extends BaseController {
+class FundamentalsController extends BaseController {
     constructor(service, options = {}) {
         super(service, options);
 
@@ -26,4 +26,4 @@ class EnterpriseController extends BaseController {
 
 }
 
-export default new EnterpriseController(new EnterpriseService(new EnterpriseRepository(EnterpriseModel)));
+export default new FundamentalsController(new FundamentalsService(new FundamentalsRepository(FundamentalsModel)));
