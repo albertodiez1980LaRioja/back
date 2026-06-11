@@ -1,6 +1,6 @@
-import FundamentalsService from './fundamentals-service.js';
-import FundamentalsRepository from './fundamentals-repository.js';
-import FundamentalsModel from './fundamentals-model.js';
+import FundamentalsLastService from './fundamentals-last-service.js';
+import FundamentalsLastRepository from './fundamentals-last-repository.js';
+import FundamentalsLastModel from './fundamentals-last-model.js';
 import { Router } from 'express';
 const RouterPlace = Router();
 
@@ -8,12 +8,12 @@ const RouterPlace = Router();
 
 import BaseController from '../../shared/base/base-controller.js';
 
-class FundamentalsController extends BaseController {
+class FundamentalsLastController extends BaseController {
     constructor(service, options = {}) {
         super(service, options);
 
         this.router = RouterPlace;
-        this.router.get('/:id', this.getOneEntity.bind(this));
+        this.router.get('/:symbol', this.getOneEntity.bind(this));
         this.router.get('', this.get.bind(this));
 
         //this.router.patch('/:id', this.update.bind(this));
@@ -25,5 +25,5 @@ class FundamentalsController extends BaseController {
 
 }
 
-export default new FundamentalsController(new FundamentalsService(new FundamentalsRepository(FundamentalsModel)));
+export default new FundamentalsLastController(new FundamentalsLastService(new FundamentalsLastRepository(FundamentalsLastModel)));
 

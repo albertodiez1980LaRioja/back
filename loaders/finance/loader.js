@@ -8,7 +8,7 @@ import { bloque1, bloque2, bloque3, bloque4, ibex35, cac40, dax40Tickers, chinaT
 
 async function loadFinancialData() {
    //await loadFundamentsQuarter('year');
-   await loadEnterprises();
+   //await loadEnterprises();
 }
 
 async function loadFundamentsQuarter(period = 'quarter') {
