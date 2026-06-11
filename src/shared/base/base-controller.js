@@ -9,41 +9,64 @@ class BaseController {
     }
 
     async get(req, res) {
-        const rows = await this.service.get(req, res);
-        res.status(200).json({ data: rows });
-        return rows;
+        try {
+            const rows = await this.service.get(req, res);
+            res.status(200).json({ data: rows });
+            return rows;
+        } catch (error) {
+            console.error('Error in get method:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
     }
 
     async getOneEntity(req, res) {
-        const result = await this.service.getOneEntity(req, res);
-        res.json(result);
-        return result;
+        try {
+            const result = await this.service.getOneEntity(req, res);
+            res.json(result);
+        } catch (error) {
+            console.error('Error in getOneEntity method:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
     }
 
     async update(req, res) {
-        const result = await this.service.update(req, res);
-        res.json({
-            message: 'Update sucess', data: result
-        });
-        return result;
+        try {
+            const result = await this.service.update(req, res);
+            res.json({
+                message: 'Update sucess', data: result
+            });
+        } catch (error) {
+            console.error('Error in update method:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
     }
 
     async delete(req, res) {
-        const deletedRowCount = await this.service.delete(req, res);
-        res.json({ message: 'Deleted sucessfully', deletedRowCount: deletedRowCount });
-        return deletedRowCount;
+        try {
+            const deletedRowCount = await this.service.delete(req, res);
+            res.json({ message: 'Deleted sucessfully', deletedRowCount: deletedRowCount });
+        } catch (error) {
+            console.error('Error in delete method:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
     }
 
     async create(req, res) {
-        const newRow = await this.service.create(req, res);
-        if (newRow) {
-            res.json({
-                message: 'Created succefully',
-                data: newRow
-            });
+        try {
+            const newRow = await this.service.create(req, res);
+            if (newRow) {
+                res.json({
+                    message: 'Created succefully',
+                    data: newRow
+                });
+            }
+            else {
+                res.status(500).json({ message: 'Failed to create entity' });
+            }
+        } catch (error) {
+            console.error('Error in create method:', error);
+            res.status(500).json({ message: 'Internal server error' });
         }
-
-        return newRow;
     }
 }
 

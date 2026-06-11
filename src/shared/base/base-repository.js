@@ -71,10 +71,8 @@ class BaseRepository {
             const rows = await this.model.findAll(params);
             return rows;
         } catch (err) {
-            res.status(500).json({
-                message: 'Something goes wrong: ' + err,
-                data: {}
-            });
+            console.error('Error in get method:', err);
+            throw err;
         }
     }
 
@@ -98,7 +96,8 @@ class BaseRepository {
         } catch (err) {
             if (transaction != undefined)
                 await transaction.rollback();
-            res.status(500).json({ message: 'Something goes wrong: ' + err });
+            console.error('Error in get method:', err);
+            throw err;
         }
     }
 
@@ -110,10 +109,8 @@ class BaseRepository {
             const filas = await this.model.findOne(params);
             return filas;
         } catch (err) {
-            res.status(500).json({
-                message: 'Something goes wrong: ' + err,
-                data: {}
-            });
+            console.error('Error in getOneEntity method:', err);
+            throw err;
         }
     }
 
@@ -128,10 +125,8 @@ class BaseRepository {
             if (transaction != undefined)
                 await transaction.rollback();
 
-            res.status(500).json({
-                message: 'Something goes wrong: ' + err,
-                data: {}
-            });
+            console.error('Error in get method:', err);
+            throw err;
         }
     }
 
@@ -141,6 +136,7 @@ class BaseRepository {
             let newRow = await this.model.create(data)
             return newRow;
         } catch (err) {
+            console.error('Error in get method:', err);
             throw err;
         }
 
