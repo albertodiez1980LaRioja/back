@@ -1,6 +1,6 @@
-import PricesService from './prices-service.js';
-import PricesRepository from './prices-repository.js';
-import PricesModel from './prices-model.js';
+import PricesLastService from './prices-last-service.js';
+import PricesLastRepository from './prices-last-repository.js';
+import PricesLastModel from './prices-last-model.js';
 
 import { Router } from 'express';
 const RouterPlace = Router();
@@ -9,7 +9,7 @@ const RouterPlace = Router();
 
 import BaseController from '../../shared/base/base-controller.js';
 
-class PricesController extends BaseController {
+class PricesLastController extends BaseController {
     constructor(service, options = {}) {
         super(service, options);
 
@@ -26,4 +26,5 @@ class PricesController extends BaseController {
 
 }
 
-export default new PricesController(new PricesService(new PricesRepository(PricesModel)));
+export default new PricesLastController(new PricesLastService(new PricesLastRepository(PricesLastModel)));
+    
