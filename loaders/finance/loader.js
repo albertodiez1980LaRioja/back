@@ -1,8 +1,8 @@
 import http from "../../src/shared/services/http/http-service.js";
 
 import EnterpriseModel from '../../src/api/enterprises/enterprises-model.js';
-//import FundamentalsModel from '../../src/api/fundamentals/fundamentals-model.js';
-//import PricesModel from '../../src/api/prices/prices-model.js';
+import FundamentalsModel from '../../src/api/fundamentals/fundamentals-model.js';
+import PricesModel from '../../src/api/prices/prices-model.js';
 import config from '../../config/config.js';
 
 import { tickersEEUU, tickersEuropa, tickersAsia } from './tickers-list.js';
@@ -11,87 +11,82 @@ import { Op } from 'sequelize';
 import yahooFinance from 'yahoo-finance2';
 
 async function loadFinancialData() {
+   // await loadEnterprises();
    //await loadFundaments();
-   //await loadEnterprises();
    //await loadPrices();
 }
 
 async function loadPrices() {
-   const yahooFinanceInstance = new yahooFinance({ suppressNotices: ['yahooSurvey'] });
+   const yahooFinanceInstance = new yahooFinance({ suppressNotices: ['yahooSurvey','ripHistorical'] });
+   const now = new Date();
    let limitDate = new Date();
-   limitDate.setDate(limitDate.getDate() - 1);
+   limitDate.setFullYear(limitDate.getFullYear() - 20);
    console.log(limitDate);
-   const lastPrices = await PricesModel.findAll({ attributes: ['symbol', 'date'], where: { date: { [Op.gte]: limitDate } } });
-   const enterprisesBD = (await FundamentalsModel.findAll({ attributes: ['symbol']/*, where: { symbol: { [Op.notIn]: lastPrices.map(p => p.symbol) } }*/ })).slice(0, 5);
+   const enterprisesBD = (await FundamentalsModel.findAll({ attributes: ['symbol']/*, where: { symbol: { [Op.notIn]: lastPrices.map(p => p.symbol) } }*/ }));
    console.log(enterprisesBD.length);
    const existingTickers = new Set(enterprisesBD.map(e => e.symbol));
-   let quote = await yahooFinanceInstance.quote('AAPL');
-   const data = await yahooFinanceInstance.quoteSummary('AAPL', {
-      modules: ["assetProfile"]
-   });
-   quote.sector = data.assetProfile.sector;
-   quote.industry = data.assetProfile.industry;
-   quote.country = data.assetProfile.country;
-   console.log('apple', quote);
    for (const ticker of existingTickers) {
-      console.log(ticker);
-      const queryOptions = {
-         period1: '2024-01-01', // Ajusta esta fecha según tus necesidades
-      };
-      //const historicalData = await yahooFinanceInstance.historical(ticker, queryOptions);
-      //console.log('data', historicalData);
-
-      /*
       try {
-         const url = 'https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=' + ticker + '&apikey=' + config.secretFinance;
-         const datas = await http.get(url);
-         if (datas && datas.length > 0) {
-            for (let data of datas) {
-               await PricesModel.upsert(data, {});
-            }
+         const rows = await yahooFinanceInstance.historical(ticker, {
+            period1: limitDate,
+            period2: now
+         });
+         for (let row of rows) {
+            row.symbol = ticker;
+            await PricesModel.upsert(row, {});
          }
+         console.log('Prices loaded successfully', ticker);
       } catch (error) {
-         console.error('Error loading prices:',
-            error.response ? error.response.data : error.message,
-            'status', error.status,
-         );
-         if (error.status === 429) {
-            console.warn('Rate limit exceeded, stopping further requests.');
-            break;
-         }
+         console.error(`Error al traer fundamentales de ${ticker}:`, error);
       }
-         */
    }
 }
 
 async function loadFundaments() {
    const yahooFinanceInstance = new yahooFinance({ suppressNotices: ['yahooSurvey'] });
-   const fundamentalsBD = (await FundamentalsModel.findAll({ attributes: ['symbol'] })).map(e => e.symbol);
-   const enterprisesBD = (await EnterpriseModel.findAll({ attributes: ['symbol'], where: { symbol: { [Op.notIn]: fundamentalsBD } } })).slice(0, 5);
+
+   const enterprisesBD = (await EnterpriseModel.findAll({ attributes: ['symbol'] }));
    const existingTickers = new Set(enterprisesBD.map(e => e.symbol));
+   //console.log('tickers', existingTickers);
    for (const ticker of existingTickers) {
       try {
-         const modules = [
+         let now = new Date();
+         let init = new Date();
+         init.setFullYear(init.getFullYear() - 10);
+         let balanceSheetDataQuarters = await yahooFinanceInstance.fundamentalsTimeSeries(ticker, {
+            period1: init,
+            period2: now,
+            type: 'quarterly',
+            module: 'all'
+         });
+         let balanceSheetDataYears = await yahooFinanceInstance.fundamentalsTimeSeries(ticker, {
+            period1: init,
+            period2: now,
+            type: 'annual',
+            module: 'all'
+         });
+         for (let data of balanceSheetDataQuarters) {
+            data.symbol = ticker;
+            data.isYearly = false;
+            await FundamentalsModel.upsert(data, {});
+         }
+         for (let data of balanceSheetDataYears) {
+            data.symbol = ticker;
+            data.isYearly = true;
+            await FundamentalsModel.upsert(data, {});
+         }
+         console.log('Fundamental loaded successfully', ticker);
 
-            //'fundamentalsTimeSeries',
-            'defaultKeyStatistics',    // Ratios clave (PER, Beta, Profit Margins...)
-            'financialData'            // Datos financieros actuales (Efectivo, Deuda...)
-         ];
-
-         const result = await yahooFinanceInstance.quoteSummary(ticker, { modules });
-
-         //console.log('Datos fundamentales recibidos:', result);
-         return result;
 
       } catch (error) {
-         console.error(`Error al traer fundamentales de ${ticker}:`, error.message);
+         console.error(`Error al traer fundamentales de ${ticker}:`, error);
       }
    }
 }
 
 async function loadEnterprises() {
    const yahooFinanceInstance = new yahooFinance({ suppressNotices: ['yahooSurvey'] });
-   const tickers = [...tickersEEUU, ...tickersEuropa, ...tickersAsia ];
+   const tickers = [...tickersEEUU, ...tickersEuropa, ...tickersAsia];
    console.log('total tickers', tickers.length);
    const enterprisesBD = await EnterpriseModel.findAll({ attributes: ['symbol'] });
    const existingTickers = new Set(enterprisesBD.map(e => e.symbol));
@@ -121,10 +116,10 @@ async function loadEnterprises() {
          console.error('Error loading enterprises', error);
          enterprisesNotLoaded.push(ticker);
       }
-      
+
    }
    console.log('Enterprises', enterprisesLoaded, enterprisesNotLoaded);
 }
 
 
-export { loadEnterprises, loadFinancialData };
+export { loadFinancialData };

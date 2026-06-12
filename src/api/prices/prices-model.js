@@ -3,16 +3,14 @@ import { sequelize } from "../../database/database.js"; // Asegúrate de que la 
 
 // Declaramos la clase que hereda de Model
 const PricesModel = sequelize.define('prices', {
-    symbol: { type: DataTypes.STRING(10), allowNull: false, primaryKey: true },
+    symbol: { type: DataTypes.STRING, allowNull: false, primaryKey: true },
     date: { type: DataTypes.DATEONLY, allowNull: false, primaryKey: true },
-    open: { type: DataTypes.FLOAT, allowNull: false},
     high: { type: DataTypes.FLOAT, allowNull: false},
+    volume: { type: DataTypes.BIGINT, allowNull: false},
+    open: { type: DataTypes.FLOAT, allowNull: false},
     low: { type: DataTypes.FLOAT, allowNull: false},
     close: { type: DataTypes.FLOAT, allowNull: false},
-    volume: { type: DataTypes.BIGINT, allowNull: false},
-    change: { type: DataTypes.FLOAT, allowNull: false},
-    changePercent: { type: DataTypes.FLOAT, allowNull: false},
-    vwap: { type: DataTypes.FLOAT, allowNull: false}
+    adjClose: { type: DataTypes.FLOAT, allowNull: false}
 }, {
     timestamps: true,
 });
